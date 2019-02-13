@@ -1,21 +1,20 @@
 //
-//  InfoPostingVC.swift
+//  FindingLocationVC.swift
 //  OnTheMap
 //
-//  Created by Sarah Alhumud on 02/06/1440 AH.
+//  Created by Sarah Alhumud on 08/06/1440 AH.
 //  Copyright © 1440 Udacity. All rights reserved.
 //
 
 import UIKit
-import MapKit
 
-class InfoPostingVC: UIViewController {
+class FindingLocationVC: UIViewController {
 
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var locationField: UITextField!
+    @IBOutlet weak var linkField: UITextField!
     
-    @IBAction func finishBtnPressed(_ sender: Any) {
+    @IBAction func findBtnPressed(_ sender: Any) {
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
