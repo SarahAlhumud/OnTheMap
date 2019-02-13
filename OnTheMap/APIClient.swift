@@ -39,7 +39,7 @@ class APIClient: NSObject {
                 completionHandlerForGET([[:]], NSError(domain: "getStudentLocations", code: 1, userInfo: userInfo as [String : Any]))
             }
             
-            guard error != nil else{
+            if error != nil { // Handle error...
                 sendError("There was an error with your request: \(error?.localizedDescription ?? "")")
                 return
             }

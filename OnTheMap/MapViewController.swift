@@ -58,9 +58,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addAnnotations()
-        
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        addAnnotations()
+    }
+    
     
     func addAnnotations(){
         // We will create an MKPointAnnotation for each dictionary in "locations". The

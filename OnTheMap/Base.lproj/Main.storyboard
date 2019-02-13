@@ -323,13 +323,13 @@
                                         <rect key="frame" x="0.0" y="0.0" width="295" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" textContentType="address-level2"/>
+                                        <textInputTraits key="textInputTraits" textContentType="location"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Link" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VBZ-MP-s1L">
                                         <rect key="frame" x="0.0" y="41" width="295" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="url"/>
+                                        <textInputTraits key="textInputTraits" textContentType="url"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="et6-AY-tfM">
                                         <rect key="frame" x="0.0" y="82" width="295" height="30"/>
@@ -340,7 +340,7 @@
                                         </state>
                                         <connections>
                                             <action selector="findBtnPressed:" destination="a7n-ND-Zer" eventType="touchUpInside" id="Q2M-ct-UDM"/>
-                                            <segue destination="1hX-h6-h1F" kind="show" id="laQ-7b-KdK"/>
+                                            <segue destination="1hX-h6-h1F" kind="show" identifier="showInfoPostingVC" id="laQ-7b-KdK"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -356,7 +356,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" id="jQh-CI-Iwc">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="J1d-Gk-58Y"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="J1d-Gk-58Y">
+                            <connections>
+                                <action selector="cancelBtnPressed:" destination="a7n-ND-Zer" id="Qrg-es-FTT"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="linkField" destination="VBZ-MP-s1L" id="TJo-k2-pae"/>
@@ -382,7 +386,7 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xtL-5n-FaB">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="PNu-e3-p8y"/>
+                                    <outlet property="delegate" destination="1hX-h6-h1F" id="Szf-mi-Lxi"/>
                                 </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fLC-pE-ubE">
@@ -396,6 +400,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
+                                    <action selector="cancelBtnPressed:" destination="1hX-h6-h1F" eventType="touchUpInside" id="LoT-g9-OgU"/>
                                     <action selector="finishBtnPressed:" destination="1hX-h6-h1F" eventType="touchUpInside" id="vVv-gc-gTh"/>
                                 </connections>
                             </button>

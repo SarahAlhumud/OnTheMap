@@ -63,9 +63,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       getTableData()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getTableData()
     }
     
     func getTableData(){
