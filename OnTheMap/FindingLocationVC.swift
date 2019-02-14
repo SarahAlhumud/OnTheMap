@@ -60,6 +60,7 @@ class FindingLocationVC: UIViewController {
         if segue.identifier == "showInfoPostingVC" {
             if let destination = segue.destination as? InfoPostingVC {
                 destination.mapString = locationField.text ?? ""
+                destination.link = linkField.text ?? ""
             }
             
         }

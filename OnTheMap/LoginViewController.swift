@@ -14,7 +14,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginBtn: UIButton!
     @IBOutlet weak var errorMsg: UILabel!
-    
+        
     @IBAction func loginPressed(_ sender: Any) {
         
         guard let email = emailField.text else {
@@ -28,7 +28,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         if !(email.trimmingCharacters(in: .whitespacesAndNewlines)).isEmpty && !(password.trimmingCharacters(in: .whitespacesAndNewlines)).isEmpty {
             setUIEnabled(false)
-            let _ = APIClient.sharedInstance().postSession(email: email, password: password, completionHandlerForPOST: { (reultsData, error) in
+            let _ = APIClient.sharedInstance().postSession(email: email, password: password, completionHandlerForPOST: { (resultsData, error) in
                 if let error = error {
                     let controller = UIAlertController(title: "", message: "\(error.localizedDescription)", preferredStyle: .alert)
                     
@@ -90,7 +90,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         emailField.delegate = self

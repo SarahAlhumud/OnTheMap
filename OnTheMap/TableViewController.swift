@@ -71,7 +71,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func getTableData(){
         let _ = APIClient.sharedInstance().getStudentLocations { (result, error) in
-            self.dictionarys = StudentLocation.studentLocationsFromResults(result) as [StudentLocation]
+            self.dictionarys = StudentLocation.getStudentLocationsFromResults(result) as [StudentLocation]
             performUIUpdatesOnMain {
                 self.tableView!.reloadData()
             }

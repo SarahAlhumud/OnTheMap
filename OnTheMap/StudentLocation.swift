@@ -33,7 +33,7 @@ struct StudentLocation {
         
     }
     
-    static func studentLocationsFromResults(_ results: [[String:Any]]) -> [StudentLocation] {
+    static func getStudentLocationsFromResults(_ results: [[String:Any]]) -> [StudentLocation] {
         
         var studentLocations = [StudentLocation]()
         

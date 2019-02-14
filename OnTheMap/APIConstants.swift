@@ -24,6 +24,13 @@ struct APIConstants {
     struct UdacityMethods {
         static let Session = "/session"
         static let Users = "/users"
+        static var UserID: String {
+            if let accountID = (UIApplication.shared.delegate as! AppDelegate).accountID {
+                return "/" + accountID
+            } else {
+                return ""
+            }
+        }
     }
     
     // MARK: Udacity JSON Body Keys
@@ -31,6 +38,19 @@ struct APIConstants {
         static let Udacity = "udacity"
         static let Username = "username"
         static let Password = "password"
+    }
+    
+    // MARK: Udacity Response Keys
+    struct UdacityResponseKeys {
+        static let Session: String = "session"
+        static let Account: String = "account"
+        static let SessionID: String = "id"
+        static let AccountID: String = "key"
+        static let User: String = "user"
+        static let Enrollments: String = "_enrollments"
+        static let FirstName: String = "first_name"
+        static let LastName: String = "last_name"
+        static let NickName: String = "nickname"
     }
     
     // MARK: Parse Constants
@@ -58,6 +78,7 @@ struct APIConstants {
     
     // MARK: Parse Response Keys
     struct ParseResponseKeys {
+        static let results: String = "results"
         static let objectId: String = "objectId"
         static let uniqueKey: String = "uniqueKey"
         static let firstName: String = "firstName"

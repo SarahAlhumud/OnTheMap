@@ -107,8 +107,8 @@
 		26D1E518220DDDB900C1F5CA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				26D1E519220DEBAB00C1F5CA /* APIConstants.swift */,
 				26D1E523220F037D00C1F5CA /* StudentLocation.swift */,
+				26D1E519220DEBAB00C1F5CA /* APIConstants.swift */,
 				26D1E525220F200300C1F5CA /* APIClient.swift */,
 			);
 			name = Model;

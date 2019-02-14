@@ -75,7 +75,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // used to create custom structs. Perhaps StudentLocation structs.
         
         let _ = APIClient.sharedInstance().getStudentLocations { (result, error) in
-            let dictionarys = StudentLocation.studentLocationsFromResults(result) as [StudentLocation]
+            let dictionarys = StudentLocation.getStudentLocationsFromResults(result) as [StudentLocation]
             for dictionary in dictionarys {
                 // Notice that the float values are being used to create CLLocationDegree values.
                 // This is a version of the Double type.

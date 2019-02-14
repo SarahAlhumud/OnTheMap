@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class APIClient: NSObject {
     
@@ -14,14 +15,15 @@ class APIClient: NSObject {
     
     // shared session
     var session = URLSession.shared
+    var delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
     
     // MARK: Initializers
-    
     override init() {
         super.init()
     }
     
     // MARK:- GET
+    // Parse API
     // GETting Student Locations
     func getStudentLocations(completionHandlerForGET: @escaping (_ result: [[String:Any]], _ error: NSError?) -> Void) -> URLSessionDataTask{
         
@@ -65,7 +67,7 @@ class APIClient: NSObject {
                 sendError("Could not parse the data as JSON Dictionarys: '\(String(describing: rawJSON))")
                 return
             }
-            guard let results = jsonDic["results"] as? [[String:Any]] else {
+            guard let results = jsonDic[APIConstants.ParseResponseKeys.results] as? [[String:Any]] else {
                 sendError("Could not parse JSON Dictionarys to single dictionary: '\(jsonDic)")
                 return
             }
@@ -78,17 +80,18 @@ class APIClient: NSObject {
     }
     
     //MARK:- POST
+    // Udacity API
     //POSTing a Session
     func postSession(email:String, password:String, completionHandlerForPOST: @escaping (_ result: [String:Any], _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         var rawJSON:Any!
 
-        var request = URLRequest(url: udacityURL())
+        var request = URLRequest(url: udacityURL(isSessionmethod: true))
         
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        // encoding a JSON body from a string, can also use a Codable struct
+        // encoding a JSON body from a string
         request.httpBody = "{\"\(APIConstants.UdacityJSONBodyKeys.Udacity)\": {\"\(APIConstants.UdacityJSONBodyKeys.Username)\": \"\(email)\", \"\(APIConstants.UdacityJSONBodyKeys.Password)\": \"\(password)\"}}".data(using: .utf8)
         let task = session.dataTask(with: request) { data, response, error in
             
@@ -133,6 +136,7 @@ class APIClient: NSObject {
                 sendError("Could not parse the data as JSON Dictionarys")
                 return
             }
+            self.assignAuthInfo(jsonDic)
             completionHandlerForPOST(jsonDic, nil)
         }
         
@@ -141,13 +145,30 @@ class APIClient: NSObject {
 
     }
     
+    //Assign sessionID and accountID to "AuthInfo" app varaible
+    private func assignAuthInfo(_ resultsData: [String : Any]){
+
+        guard let session = resultsData[APIConstants.UdacityResponseKeys.Session] as? [String:Any] else {
+            print("Could not parse JSON Dictionarys to single dictionary: '\(resultsData)")
+            return
+        }
+        guard let account = resultsData[APIConstants.UdacityResponseKeys.Account] as? [String:Any] else {
+            print("Could not parse JSON Dictionarys to single dictionary: '\(resultsData)")
+            return
+        }
+        delegate.sessionID = session[APIConstants.UdacityResponseKeys.SessionID] as? String ?? ""
+        delegate.accountID = account[APIConstants.UdacityResponseKeys.AccountID] as? String ?? ""
+        
+    }
+    
     //MARK:- DELETE
+    // Udacity API
     //DELETEing a Session
     func deleteSession(completionHandlerForDELETE: @escaping (_ result: [String:Any], _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         var rawJSON:Any!
         
-        var request = URLRequest(url: udacityURL())
+        var request = URLRequest(url: udacityURL(isSessionmethod: true))
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
         let sharedCookieStorage = HTTPCookieStorage.shared
@@ -205,6 +226,76 @@ class APIClient: NSObject {
         
     }
     
+    // Udacity API
+    //GETting Public User Data
+    func getNickname(completionHandlerForGET: @escaping (_ result: String, _ error: NSError?) -> Void) -> URLSessionDataTask {
+        
+        var rawJSON:Any!
+        
+        var request = URLRequest(url: udacityURL(isSessionmethod: false))
+        
+        request.httpMethod = "GET"
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            
+            func sendError(_ error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGET("", NSError(domain: "getNickname", code: 1, userInfo: userInfo as [String : Any]))
+            }
+            
+            guard (error == nil) else {
+                sendError("There was an error with your request: \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                sendError("Your request returned a status code other than 2xx!")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                sendError("No data was returned by the request!")
+                return
+            }
+
+            let range = 5..<data.count
+            let newData = data.subdata(in: range) /* subset response data! */
+            print(String(data: newData, encoding: .utf8)!)
+
+            do {
+                rawJSON = try JSONSerialization.jsonObject(with: newData, options: [])
+            } catch{
+                sendError("Could not parse the data as JSON")
+                print("Faild serialize data")
+            }
+            guard let jsonDic = rawJSON as? [String:AnyObject] else {
+                sendError("Could not parse the data as JSON Dictionarys")
+                return
+            }
+//            guard let user = jsonDic[APIConstants.UdacityResponseKeys.Enrollments] as? [String:Any] else {
+//                sendError("Could not parse User Dictionarys to single dictionary")
+//                return
+//            }
+            guard let firstName = jsonDic[APIConstants.UdacityResponseKeys.FirstName] as? String else {
+                sendError("Could not parse user Dictionarys to firstName string")
+                return
+            }
+            guard let lastName = jsonDic[APIConstants.UdacityResponseKeys.LastName] as? String else {
+                sendError("Could not parse user Dictionarys to lastName string")
+                return
+            }
+
+            completionHandlerForGET(firstName + " " + lastName, nil)
+        }
+        
+        task.resume()
+        return task
+        
+    }
+    
     //Helper for Creating a Parse URL
     private func parseURL() -> URL {
         
@@ -217,12 +308,12 @@ class APIClient: NSObject {
     }
     
     //Helper for Creating a Udacity URL
-    private func udacityURL() -> URL {
+    private func udacityURL(isSessionmethod: Bool) -> URL {
         
         var components = URLComponents()
         components.scheme = APIConstants.UdacityConstants.APIScheme
         components.host = APIConstants.UdacityConstants.APIHost
-        components.path = APIConstants.UdacityConstants.APIPath + APIConstants.UdacityMethods.Session
+        components.path = APIConstants.UdacityConstants.APIPath + ((isSessionmethod) ? (APIConstants.UdacityMethods.Session) : (APIConstants.UdacityMethods.Users + APIConstants.UdacityMethods.UserID))
         
         return components.url!
     }
