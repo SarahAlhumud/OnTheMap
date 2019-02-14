@@ -12,7 +12,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var tableView: UITableView!
     
-    var dictionarys:[StudentLocation] = [StudentLocation]()
+    var dictionarys:[StudentInformation] = [StudentInformation]()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dictionarys.count
@@ -39,11 +39,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func logoutBtnPressed(_ sender: Any) {
         let _ = APIClient.sharedInstance().deleteSession(completionHandlerForDELETE: { (reultsData, error) in
             if let error = error {
-                let controller = UIAlertController(title: "", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                
-                controller.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                
-                self.present(controller, animated: true, completion: nil)
+                self.showAlert(title: "", msg: "\(error.localizedDescription)")
             }
             performUIUpdatesOnMain {
                 let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginVC")
@@ -53,6 +49,14 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
         
     }
+    func showAlert(title: String, msg: String){
+        let controller = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        
+        controller.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        self.present(controller, animated: true, completion: nil)
+    }
+    
     @IBAction func refreshBtnPreesed(_ sender: Any) {
         getTableData()
     }
@@ -71,7 +75,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func getTableData(){
         let _ = APIClient.sharedInstance().getStudentLocations { (result, error) in
-            self.dictionarys = StudentLocation.getStudentLocationsFromResults(result) as [StudentLocation]
+            if let error = error {
+                self.showAlert(title: "", msg: "\(error.localizedDescription)")
+            }
+            self.dictionarys = StudentInformation.getStudentLocationsFromResults(result) as [StudentInformation]
             performUIUpdatesOnMain {
                 self.tableView!.reloadData()
             }

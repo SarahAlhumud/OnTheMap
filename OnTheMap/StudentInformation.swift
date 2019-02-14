@@ -1,13 +1,13 @@
 //
-//  StudentLocation.swift
+//  StudentInformation.swift
 //  OnTheMap
 //
 //  Created by Sarah Alhumud on 04/06/1440 AH.
 //  Copyright © 1440 Udacity. All rights reserved.
 //
 
-//MARK: StudentLocation
-struct StudentLocation {
+//MARK: StudentInformation
+struct StudentInformation {
     
     //MARK: Properties
     
@@ -33,13 +33,24 @@ struct StudentLocation {
         
     }
     
-    static func getStudentLocationsFromResults(_ results: [[String:Any]]) -> [StudentLocation] {
+    init(id: String, key: String, first: String, last: String, map: String, url: String, lat: Double, long: Double) {
+        objectId = id
+        uniqueKey = key
+        firstName = first
+        lastName = last
+        mapString = map
+        mediaURL = url
+        latitude = lat
+        longitude = long
+    }
+    
+    static func getStudentLocationsFromResults(_ results: [[String:Any]]) -> [StudentInformation] {
         
-        var studentLocations = [StudentLocation]()
+        var studentLocations = [StudentInformation]()
         
         // iterate through array of dictionaries, each StudentLocation is a dictionary
         for result in results {
-            studentLocations.append(StudentLocation(dictionary: result))
+            studentLocations.append(StudentInformation(dictionary: result))
         }
         
         return studentLocations

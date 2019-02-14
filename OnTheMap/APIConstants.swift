@@ -66,8 +66,14 @@ struct APIConstants {
     struct ParseParameterKeys {
         static let ApplicationId = "X-Parse-Application-Id"
         static let RESTAPIKey = "X-Parse-REST-API-Key"
+        static let Limit = "limit"
     }
     
+    // MARK: Parse Parameter Values
+    struct ParseParameterValues {
+        static let Limit100 = 100
+        
+    }
     
     // MARK: Parse JSON Body Keys
     struct ParseJSONBodyKeys {

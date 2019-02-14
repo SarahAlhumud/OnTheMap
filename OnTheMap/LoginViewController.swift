@@ -14,7 +14,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginBtn: UIButton!
     @IBOutlet weak var errorMsg: UILabel!
-        
+    
     @IBAction func loginPressed(_ sender: Any) {
         
         guard let email = emailField.text else {
